@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/06/24 14:40:09 by rachou           ###   ########.fr       */
+/*   Updated: 2024/06/26 17:30:41 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+static void	ft_free(char *path, char *full_path)
+{
+	free(path);
+	free(full_path);
+}
+
+static void	ft_free_tab(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] != NULL)	
+			free(cmd[i]);
+		i++;
+	}
+}
 
 int	ft_strncmp(const char *s1, const char *s2, int n)//compare les 1er n caractères des chaînes s1 et s2, renvoit un entier négatif, nul ou positif selon que s1 est <, = , > à s2.
 {
@@ -41,33 +60,61 @@ int path(char **env)//vérifie que le Path existe dans l’environnement.
     }
     return (0);
 }
-char    *get_path(char **env, char *s_cmd)//vérifie si s_cmd est exécutable et, si ce n'est pas le cas, extrait et divise la variable d'environnement PATH pour rechercher le chemin de la commande.
+char    *get_path(char *s_cmd, char **env, int i)//vérifie si s_cmd est exécutable et, si ce n'est pas le cas, extrait et divise la variable d'environnement PATH pour rechercher le chemin de la commande.
 {
-    int     i;
-    char    **all_path;
-    
-    if (!access(s_cmd, X_OK))
-        return (s_cmd);
-    i = 0;
-    while (env[i])
-    {
-        if (ft_strncmp("PATH", env[i], 4) == 0)
-            break;
-        i++;
-    }
-    all_path = ft_split(env[i + 5], ':');
-    
+	char	**split_path;
+	char	*path;
+	char	*full_path;
+
+	if (!access(s_cmd, X_OK))
+		return (s_cmd);
+	while (env[i])
+	{
+		if (ft_strncmp("PATH", env[i], 4) == 0)
+			break ;
+		i++;
+	}
+	split_path = ft_split(env[i] + 5, ':');
+	if (!split_path)
+		return (NULL);
+	i = 0;
+	while (split_path[i])
+	{
+		path = ft_strjoin(split_path[i], "/");
+		full_path = ft_strjoin(path, s_cmd);
+		if (!path || !full_path)
+			ft_free(path, full_path);
+		if (!access(full_path, X_OK))
+			return (full_path);
+		if (full_path)
+			free(full_path);
+	}
+	return (ft_free_tab(split_path));
 }
 
 static void ft_exec(char *cmd, char **env)
 {
-    char    **s_cmd;
-    char    *path;
-
-    s_cmd = ft_split(cmd, ' ');
-    path = get_path(env, s_cmd[0]);
-    
-    
+    char	**split_cmd;
+	char	*path;
+   
+	split_cmd = NULL;
+	path = NULL; 
+	split_cmd = ft_split(cmd, ' ');
+	if (!split_cmd)
+		exit(EXIT_FAILURE);
+	path = get_path(split_cmd[0], env, 0)
+	if (!path)
+	{
+		perror("CMD: ");
+		ft_free_tab(split_cmd);
+		exit(127);
+	}
+	if (execve(path, split_cmd, env) == -1)
+	{
+		perror("EXEC: ");
+		ft_free_tab(split_cmd);
+		exit(126);
+	}
 }
 
 int open_files(char *argv1, char *argv2, bool boolean)
@@ -97,8 +144,10 @@ static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
     }
     if (boolean == false)
     {
-        //dup2(fd, 0);
+		dup2(pipe_fd[0], 0);
         dup2(fd, 1);
+		close(pipe_fd[1]);
+		ft_exec(argv[3], env);
     }
 }
 
