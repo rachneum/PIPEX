@@ -11,7 +11,7 @@ int	ft_strncmp(const char *s1, const char *s2, int n);
 int path(char **env);
 int open_files(char *argv1, char *argv2, bool boolean);
 
-char    *get_path(char **env, char *s_cmd);
+char    *get_path(char *s_cmd, char **env, int i);
 char	**ft_split(char const *s, char c);
 
 #endif

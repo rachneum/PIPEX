@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/06/26 17:30:41 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/06/28 14:28:35 by rachou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	ft_free_tab(char **cmd)
 	}
 }
 
-int	ft_strncmp(const char *s1, const char *s2, int n)//compare les 1er n caractères des chaînes s1 et s2, renvoit un entier négatif, nul ou positif selon que s1 est <, = , > à s2.
+int	ft_strncmp(const char *s1, const char *s2, int n)
 {
 	int	i;
 
@@ -47,20 +47,45 @@ int	ft_strncmp(const char *s1, const char *s2, int n)//compare les 1er n caract�
 	return (0);
 }
 
-int path(char **env)//vérifie que le Path existe dans l’environnement.
+int	ft_strlen(const char *s)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (env[i])
-    {
-        if (ft_strncmp("PATH", env[i], 4) == 0)
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
 }
-char    *get_path(char *s_cmd, char **env, int i)//vérifie si s_cmd est exécutable et, si ce n'est pas le cas, extrait et divise la variable d'environnement PATH pour rechercher le chemin de la commande.
+
+ char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*dst;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	dst = (char *)malloc(sizeof(char) * ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!dst)
+		return (NULL);
+	while (s1[i])
+	{
+		dst[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		dst[i] = s2[j];
+		i++;
+		j++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
+char    *get_path(char *s_cmd, char **env, int i)
 {
 	char	**split_path;
 	char	*path;
@@ -102,7 +127,7 @@ static void ft_exec(char *cmd, char **env)
 	split_cmd = ft_split(cmd, ' ');
 	if (!split_cmd)
 		exit(EXIT_FAILURE);
-	path = get_path(split_cmd[0], env, 0)
+	path = get_path(split_cmd[0], env, 0);
 	if (!path)
 	{
 		perror("CMD: ");
@@ -137,10 +162,10 @@ static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
         exit(EXIT_FAILURE);
     if (boolean == true)
     {
-        dup2(fd, 0);//redirige l'entrée standard pour qu'elle vienne d'un fichier (redirige fd vers le descripteur de fichier 0, qui est généralement l'entrée standard (stdin)).
-        dup2(pipe_fd[1], 1);//redirige la sortie standard pour qu'elle aille dans un pipe, permettant au processus parent de lire cette sortie.
-        close(pipe_fd[0]);//assure que l'extrémité de lecture du pipe est fermée dans le processus enfant, car le processus enfant n'en a pas besoin.
-        ft_exec(argv[2], env);//exécute un nouveau programme, utilisant les redirections mises en place juste avant.
+        dup2(fd, 0);
+        dup2(pipe_fd[1], 1);
+        close(pipe_fd[0]);
+        ft_exec(argv[2], env);
     }
     if (boolean == false)
     {
@@ -151,16 +176,30 @@ static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
     }
 }
 
+int path(char **env)
+{
+    int i;
+
+    i = 0;
+    while (env[i])
+    {
+        if (ft_strncmp("PATH", env[i], 4) == 0)
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
 int main(int argc, char **argv, char **env)
 {
     pid_t   pid;
-    int     pipe_fd[2];//tube de communication
+    int     pipe_fd[2];
     
     if (path(env) == 0)
         return (0);
     if (argc != 5)
         return (0);
-    if (pipe(pipe_fd) == -1)//lance ma fct pipe et la vérifie simultanément.
+    if (pipe(pipe_fd) == -1)
         exit(EXIT_FAILURE);
     pid = fork();
     if (pid == -1)
@@ -169,5 +208,3 @@ int main(int argc, char **argv, char **env)
         child_parent_ex(argv, env, pipe_fd, true);
     child_parent_ex(argv, env, pipe_fd, false);
 }
-//pid == numéro de matricule
-//ex: le pid du child = 0.
