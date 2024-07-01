@@ -6,7 +6,7 @@
 /*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/06/28 14:28:35 by rachou           ###   ########.fr       */
+/*   Updated: 2024/06/28 14:23:09 by rachou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	ft_free_tab(char **cmd)
 	}
 }
 
-int	ft_strncmp(const char *s1, const char *s2, int n)
+int	ft_strncmp(const char *s1, const char *s2, int n)//compare les 1er n caractères des chaînes s1 et s2, renvoit un entier négatif, nul ou positif selon que s1 est <, = , > à s2.
 {
 	int	i;
 
@@ -57,7 +57,7 @@ int	ft_strlen(const char *s)
 	return (i);
 }
 
- char	*ft_strjoin(char *s1, char *s2)
+ char	*ft_strjoin(char *s1, char *s2)//alloue et retourne une nouvelle chaîne qui est la concaténation de s1 et s2, ou NULL en cas d'échec d'allocation ou si l'un des arguments est NULL.
 {
 	char	*dst;
 	int		i;
@@ -85,13 +85,13 @@ int	ft_strlen(const char *s)
 	return (dst);
 }
 
-char    *get_path(char *s_cmd, char **env, int i)
+char    *get_path(char *s_cmd, char **env, int i)//vérifie si s_cmd est exécutable et, si ce n'est pas le cas, extrait et divise la variable d'environnement PATH pour rechercher le chemin de la commande.
 {
 	char	**split_path;
 	char	*path;
 	char	*full_path;
 
-	if (!access(s_cmd, X_OK))
+	if (!access(s_cmd, X_OK))//vérifie si la cmd est déjà exécutable
 		return (s_cmd);
 	while (env[i])
 	{
@@ -117,7 +117,7 @@ char    *get_path(char *s_cmd, char **env, int i)
 	return (ft_free_tab(split_path));
 }
 
-static void ft_exec(char *cmd, char **env)
+static void ft_exec(char *cmd, char **env)//divise la commande en arguments, cherche le chemin de la commande dans l'environnement, et exécute la commande, affichant un message d'erreur et sortant avec un code d'erreur approprié si la commande ne peut pas être trouvée ou exécutée.
 {
     char	**split_cmd;
 	char	*path;
@@ -142,7 +142,7 @@ static void ft_exec(char *cmd, char **env)
 	}
 }
 
-int open_files(char *argv1, char *argv2, bool boolean)
+int open_files(char *argv1, char *argv2, bool boolean)//ouvre un fichier en lecture ou en écriture selon la valeur du booléen, retournant le descripteur de fichier correspondant.
 {
     int fd;
 
@@ -153,7 +153,7 @@ int open_files(char *argv1, char *argv2, bool boolean)
     return (fd);
 }
 
-static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
+static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)//redirige les entrées/sorties standard pour un processus enfant en fonction d'un booléen, exécute un fichier, et utilise un pipe pour la communication entre processus parent et enfant.
 {
     int fd;
 
@@ -162,10 +162,10 @@ static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
         exit(EXIT_FAILURE);
     if (boolean == true)
     {
-        dup2(fd, 0);
-        dup2(pipe_fd[1], 1);
-        close(pipe_fd[0]);
-        ft_exec(argv[2], env);
+        dup2(fd, 0);//redirige l'entrée standard pour qu'elle vienne d'un fichier (redirige fd vers le descripteur de fichier 0, qui est généralement l'entrée standard (stdin)).
+        dup2(pipe_fd[1], 1);//redirige la sortie standard pour qu'elle aille dans un pipe, permettant au processus parent de lire cette sortie.
+        close(pipe_fd[0]);//assure que l'extrémité de lecture du pipe est fermée dans le processus enfant, car le processus enfant n'en a pas besoin.
+        ft_exec(argv[2], env);//exécute un nouveau programme, utilisant les redirections mises en place juste avant.
     }
     if (boolean == false)
     {
@@ -176,7 +176,7 @@ static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
     }
 }
 
-int path(char **env)
+int path(char **env)//vérifie que le Path existe dans l’environnement.
 {
     int i;
 
@@ -192,14 +192,14 @@ int path(char **env)
 
 int main(int argc, char **argv, char **env)
 {
-    pid_t   pid;
-    int     pipe_fd[2];
+    pid_t   pid;//pid == numéro de matricule (ex: le pid du child = 0).
+    int     pipe_fd[2];//tube de communication
     
     if (path(env) == 0)
         return (0);
     if (argc != 5)
         return (0);
-    if (pipe(pipe_fd) == -1)
+    if (pipe(pipe_fd) == -1)//lance ma fct pipe et la vérifie simultanément.
         exit(EXIT_FAILURE);
     pid = fork();
     if (pid == -1)
