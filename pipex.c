@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/06/28 14:23:09 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/01 13:16:06 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,18 @@ static void	ft_free(char *path, char *full_path)
 	free(full_path);
 }
 
-static void	ft_free_tab(char **cmd)
+static char *ft_free_tab(char **cmd)
 {
 	int	i;
 
 	i = 0;
 	while (cmd[i])
 	{
-		if (cmd[i] != NULL)	
-			free(cmd[i]);
+		free(cmd[i]);
 		i++;
 	}
+    free(cmd[i]);
+    return (NULL);
 }
 
 int	ft_strncmp(const char *s1, const char *s2, int n)//compare les 1er n caractères des chaînes s1 et s2, renvoit un entier négatif, nul ou positif selon que s1 est <, = , > à s2.
