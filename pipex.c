@@ -6,7 +6,7 @@
 /*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/01 16:21:58 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/01 16:46:04 by rachou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void ft_exec(char *cmd, char **env)
 	split_cmd = ft_split(cmd, ' ');
 	if (!split_cmd)
 		exit(EXIT_FAILURE);
-	path = get_path(split_cmd[0], env, 0);
+	path = get_path(split_cmd[0], env, -1);
 	if (!path)
 	{
 		perror("CMD: ");
