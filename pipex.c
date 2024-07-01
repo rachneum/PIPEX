@@ -6,11 +6,31 @@
 /*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/01 13:16:06 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/07/01 13:36:48 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+static void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (!s)
+		return ;
+	while (s[i])
+	{
+		write(fd, &s[i], 1);
+		i++;
+	}
+}
+
+static void ft_error(char *str)
+{
+    ft_putstr_fd(str, 2);
+    exit(EXIT_FAILURE);
+}
 
 static void	ft_free(char *path, char *full_path)
 {
@@ -170,8 +190,8 @@ static void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
     }
     if (boolean == false)
     {
-		dup2(pipe_fd[0], 0);
         dup2(fd, 1);
+		dup2(pipe_fd[0], 0);
 		close(pipe_fd[1]);
 		ft_exec(argv[3], env);
     }
@@ -199,7 +219,7 @@ int main(int argc, char **argv, char **env)
     if (path(env) == 0)
         return (0);
     if (argc != 5)
-        return (0);
+        ft_error("ERROR: There is not 5 arguments!\n");
     if (pipe(pipe_fd) == -1)//lance ma fct pipe et la vérifie simultanément.
         exit(EXIT_FAILURE);
     pid = fork();
