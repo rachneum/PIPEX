@@ -15,5 +15,12 @@ int	ft_strlen(const char *s);
 char    *get_path(char *s_cmd, char **env, int i);
 char	**ft_split(char const *s, char c);
 char	*ft_strjoin(char *s1, char *s2);
+char	*ft_free_tab(char **cmd);
+
+void	child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean);
+void	ft_exec(char *cmd, char **env);
+void	ft_putstr_fd(char *s, int fd);
+void	ft_free(char *path, char *full_path);
+void	ft_error(char *str);
 
 #endif

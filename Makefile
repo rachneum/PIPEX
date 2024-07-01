@@ -9,7 +9,11 @@ CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
 
 SRC =	pipex.c \
-		ft_split.c
+		pipex_utils.c \
+		ft_error.c \
+		ft_free.c \
+		ft_split.c \
+		ft_utils.c
 
 .c.o:
 	$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDES)

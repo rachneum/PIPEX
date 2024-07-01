@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:16:46 by rachou            #+#    #+#             */
-/*   Updated: 2024/06/24 14:28:21 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/01 16:24:41 by rachou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static char	**ft_free(char **ptr, int i)
+static char	**ft_free_split(char **ptr, int i)
 {
 	while (i > 0)
 	{
@@ -79,7 +79,7 @@ static char	**ft_split_wds(char const *s, char c, char **dst, int num_wds)
 		}
 		dst[wds] = (char *)malloc(sizeof(char) * (len_wds + 1));
 		if (!dst[wds])
-			return (ft_free(dst, wds));
+			return (ft_free_split(dst, wds));
 		ft_put(dst[wds], s, i, len_wds);
 		len_wds = 0;
 		wds++;
