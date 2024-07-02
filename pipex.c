@@ -6,7 +6,7 @@
 /*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/02 13:16:59 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/02 13:57:02 by rachou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void ft_exec(char *cmd, char **env)
 void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
 {
     int fd;
-
-    printf("-------------");
+    
     fd = open_files(argv[1], argv[4], boolean);
     if (fd == -1)
         exit(EXIT_FAILURE);
@@ -50,12 +49,10 @@ void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
         dup2(fd, 0);
         dup2(pipe_fd[1], 1);
         close(pipe_fd[0]);
-        printf("-------------");
         ft_exec(argv[2], env);
     }
     if (boolean == false)
     {
-        printf("-------------");
         dup2(pipe_fd[0], 0);
         dup2(fd, 1);
 		close(pipe_fd[1]);
@@ -68,8 +65,7 @@ int main(int argc, char **argv, char **env)
 {
     pid_t   pid;
     int     pipe_fd[2];
-    
-    printf("-------------");
+
     if (path(env) == 0)
         return (0);
     if (argc != 5)
