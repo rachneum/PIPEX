@@ -6,7 +6,7 @@
 /*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:10:02 by rachou            #+#    #+#             */
-/*   Updated: 2024/07/01 16:47:03 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/02 13:17:04 by rachou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ char    *get_path(char *s_cmd, char **env, int i)
 	split_path = ft_split(env[i] + 5, ':');
 	if (!split_path)
 		return (NULL);
-	i = 0;
-	while (split_path[i])
+	i = -1;
+	while (split_path[++i])
 	{
 		path = ft_strjoin(split_path[i], "/");
 		full_path = ft_strjoin(path, s_cmd);
