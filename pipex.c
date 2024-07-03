@@ -6,7 +6,7 @@
 /*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/02 13:57:02 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/03 12:14:33 by rachou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
         dup2(pipe_fd[0], 0);
         dup2(fd, 1);
 		close(pipe_fd[1]);
-        write(2, "salut\n", 6);
 		ft_exec(argv[3], env);
     }
 }
