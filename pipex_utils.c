@@ -6,7 +6,7 @@
 /*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:10:02 by rachou            #+#    #+#             */
-/*   Updated: 2024/07/04 13:53:17 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:52:51 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ int	check_path(char **env)
 	int	i;
 
 	i = 0;
+	if (!env)
+		return (-1);
 	while (env[i])
 	{
 		if (ft_strncmp("PATH", env[i], 4) == 0)
-			return (1);
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 int	open_files(char *argv1, char *argv2, bool boolean)
@@ -45,17 +47,13 @@ char	*get_path(char *s_cmd, char **env, int i)
 
 	if (!access(s_cmd, X_OK))
 		return (s_cmd);
-	if (!check_path(env))
+	if (check_path(env) == -1)
 		ft_error("ERROR: The PATH does not exist in the environment!\n");
-	while (env[++i])
-		if (ft_strncmp("PATH", env[i], 4) == 0)
-			break ;
-	if (!env[i])
+	if (!env[check_path(env)])
 		return (s_cmd);
-	split_path = ft_split(env[i] + 5, ':');
+	split_path = ft_split(env[check_path(env)] + 5, ':');
 	if (!split_path)
 		return (NULL);
-	i = -1;
 	while (split_path[++i])
 	{
 		path = ft_strjoin(split_path[i], "/");
