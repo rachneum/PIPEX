@@ -6,7 +6,7 @@
 /*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/04 13:45:35 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:18:32 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
 
 	fd = open_files(argv[1], argv[4], boolean);
 	if (fd == -1)
-		exit(EXIT_FAILURE);
+		ft_error("ERROR: Permission denied!\n");
 	if (boolean == true)
 	{
 		dup2(fd, 0);
