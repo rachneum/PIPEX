@@ -3,41 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:10:02 by rachou            #+#    #+#             */
-/*   Updated: 2024/07/02 13:17:04 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/04 12:54:44 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int path(char **env)
+int	path(char **env)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (env[i])
-    {
-        if (ft_strncmp("PATH", env[i], 4) == 0)
-            return (1);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp("PATH", env[i], 4) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
-int open_files(char *argv1, char *argv2, bool boolean)
+int	open_files(char *argv1, char *argv2, bool boolean)
 {
-    int fd;
+	int	fd;
 
-    if (boolean == true)
-        fd = open(argv1, O_RDONLY, 0777);
-    if (boolean == false)
-        fd = open(argv2, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-    return (fd);
+	if (boolean == true)
+		fd = open(argv1, O_RDONLY, 0777);
+	if (boolean == false)
+		fd = open(argv2, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	return (fd);
 }
 
-char    *get_path(char *s_cmd, char **env, int i)
+char	*get_path(char *s_cmd, char **env, int i)
 {
 	char	**split_path;
 	char	*path;

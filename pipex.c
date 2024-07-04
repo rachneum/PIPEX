@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/03 12:14:33 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/04 12:52:01 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void ft_exec(char *cmd, char **env)
+void	ft_exec(char *cmd, char **env)
 {
-    char	**split_cmd;
+	char	**split_cmd;
 	char	*path;
-   
+
 	split_cmd = NULL;
-	path = NULL; 
+	path = NULL;
 	split_cmd = ft_split(cmd, ' ');
 	if (!split_cmd)
 		exit(EXIT_FAILURE);
@@ -37,44 +37,44 @@ void ft_exec(char *cmd, char **env)
 	}
 }
 
-void child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
+void	child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
 {
-    int fd;
-    
-    fd = open_files(argv[1], argv[4], boolean);
-    if (fd == -1)
-        exit(EXIT_FAILURE);
-    if (boolean == true)
-    {
-        dup2(fd, 0);
-        dup2(pipe_fd[1], 1);
-        close(pipe_fd[0]);
-        ft_exec(argv[2], env);
-    }
-    if (boolean == false)
-    {
-        dup2(pipe_fd[0], 0);
-        dup2(fd, 1);
+	int	fd;
+
+	fd = open_files(argv[1], argv[4], boolean);
+	if (fd == -1)
+		exit(EXIT_FAILURE);
+	if (boolean == true)
+	{
+		dup2(fd, 0);
+		dup2(pipe_fd[1], 1);
+		close(pipe_fd[0]);
+		ft_exec(argv[2], env);
+	}
+	if (boolean == false)
+	{
+		dup2(pipe_fd[0], 0);
+		dup2(fd, 1);
 		close(pipe_fd[1]);
 		ft_exec(argv[3], env);
-    }
+	}
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-    pid_t   pid;
-    int     pipe_fd[2];
+	pid_t	pid;
+	int		pipe_fd[2];
 
-    if (path(env) == 0)
-        return (0);
-    if (argc != 5)
-        ft_error("ERROR: There is not 5 arguments!\n");
-    if (pipe(pipe_fd) == -1)
-        exit(EXIT_FAILURE);
-    pid = fork();
-    if (pid == -1)
-        exit(EXIT_FAILURE);
-    if (pid == 0)
-        child_parent_ex(argv, env, pipe_fd, true);
-    child_parent_ex(argv, env, pipe_fd, false);
+	if (path(env) == 0)
+		return (0);
+	if (argc != 5)
+		ft_error("ERROR: There is not 5 arguments!\n");
+	if (pipe(pipe_fd) == -1)
+		exit(EXIT_FAILURE);
+	pid = fork();
+	if (pid == -1)
+		exit(EXIT_FAILURE);
+	if (pid == 0)
+		child_parent_ex(argv, env, pipe_fd, true);
+	child_parent_ex(argv, env, pipe_fd, false);
 }

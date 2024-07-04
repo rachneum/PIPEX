@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rachou <rachou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:15:11 by rachou            #+#    #+#             */
-/*   Updated: 2024/07/01 16:17:38 by rachou           ###   ########.fr       */
+/*   Updated: 2024/07/04 12:47:59 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ char	*ft_free_tab(char **cmd)
 		free(cmd[i]);
 		i++;
 	}
-    free(cmd[i]);
-    return (NULL);
+	free(cmd[i]);
+	return (NULL);
 }
