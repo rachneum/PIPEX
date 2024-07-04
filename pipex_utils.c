@@ -6,13 +6,13 @@
 /*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 16:10:02 by rachou            #+#    #+#             */
-/*   Updated: 2024/07/04 12:54:44 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:53:17 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	path(char **env)
+int	check_path(char **env)
 {
 	int	i;
 
@@ -45,9 +45,13 @@ char	*get_path(char *s_cmd, char **env, int i)
 
 	if (!access(s_cmd, X_OK))
 		return (s_cmd);
+	if (!check_path(env))
+		ft_error("ERROR: The PATH does not exist in the environment!\n");
 	while (env[++i])
 		if (ft_strncmp("PATH", env[i], 4) == 0)
 			break ;
+	if (!env[i])
+		return (s_cmd);
 	split_path = ft_split(env[i] + 5, ':');
 	if (!split_path)
 		return (NULL);

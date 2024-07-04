@@ -6,7 +6,7 @@
 /*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/04 12:52:01 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:45:35 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,13 @@ int	main(int argc, char **argv, char **env)
 	pid_t	pid;
 	int		pipe_fd[2];
 
-	if (path(env) == 0)
-		return (0);
 	if (argc != 5)
 		ft_error("ERROR: There is not 5 arguments!\n");
 	if (pipe(pipe_fd) == -1)
-		exit(EXIT_FAILURE);
+		ft_error("ERROR: The cration of the pipe has failed!\n");
 	pid = fork();
 	if (pid == -1)
-		exit(EXIT_FAILURE);
+		ft_error("ERROR: Fork has failed!\n");
 	if (pid == 0)
 		child_parent_ex(argv, env, pipe_fd, true);
 	child_parent_ex(argv, env, pipe_fd, false);

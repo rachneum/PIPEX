@@ -6,7 +6,7 @@
 /*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 12:52:19 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/04 12:55:10 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/07/04 13:52:30 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdlib.h>
 
 int		ft_strncmp(const char *s1, const char *s2, int n);
-int		path(char **env);
+int		check_path(char **env);
 int		open_files(char *argv1, char *argv2, bool boolean);
 int		ft_strlen(const char *s);
 
