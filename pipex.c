@@ -6,7 +6,7 @@
 /*   By: raneuman <raneuman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 15:41:03 by raneuman          #+#    #+#             */
-/*   Updated: 2024/07/04 14:39:30 by raneuman         ###   ########.fr       */
+/*   Updated: 2024/07/05 14:33:51 by raneuman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	child_parent_ex(char **argv, char **env, int *pipe_fd, bool boolean)
 	}
 	if (boolean == false)
 	{
-		dup2(pipe_fd[0], 0);
 		dup2(fd, 1);
+		dup2(pipe_fd[0], 0);
 		close(pipe_fd[1]);
 		ft_exec(argv[3], env);
 	}
